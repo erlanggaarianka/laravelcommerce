@@ -1,50 +1,42 @@
 <div>
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">User Accounts</h5>
-            <a href="{{ route('account.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> Register Account
+            <h5 class="mb-0">Outlets</h5>
+            <a href="{{ route('outlet.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Add Outlet
             </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table id="accounts-table" class="table table-striped table-hover" style="width:100%">
+                <table id="outlets-table" class="table table-striped table-hover" style="width:100%">
                     <thead class="table-light">
                         <tr>
                             <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Outlet</th> <!-- New column -->
-                            <th>Registered At</th>
+                            <th>Address</th>
+                            <th>Phone</th>
+                            <th>Assigned Cashiers</th>
+                            <th>Created At</th>
                             <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($accounts as $account)
+                        @foreach ($outlets as $outlet)
                             <tr>
-                                <td>{{ $account->name }}</td>
-                                <td>{{ $account->email }}</td>
+                                <td>{{ $outlet->name }}</td>
+                                <td>{{ $outlet->address }}</td>
+                                <td>{{ $outlet->phone ?? 'N/A' }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $account->role === 'Owner' ? 'primary' : 'success' }}">
-                                        {{ $account->role }}
+                                    <span class="badge bg-primary">
+                                        {{ $outlet->cashiers()->count() }}
                                     </span>
                                 </td>
-                                <td>
-                                    @if($account->outlet)
-                                        <span class="badge bg-info">
-                                            {{ $account->outlet->name }}
-                                        </span>
-                                    @else
-                                        <span class="text-muted">N/A</span>
-                                    @endif
-                                </td>
-                                <td>{{ $account->created_at->format('d M Y') }}</td>
+                                <td>{{ $outlet->created_at->format('d M Y') }}</td>
                                 <td class="text-end">
                                     <div class="btn-group" role="group">
-                                        <a href="{{ route('account.edit', $account->id) }}" class="btn btn-sm btn-primary">
+                                        <a href="{{ route('outlet.edit', $outlet->id) }}" class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button wire:click="confirmDelete({{ $account->id }})" class="btn btn-sm btn-danger">
+                                        <button wire:click="confirmDelete({{ $outlet->id }})" class="btn btn-sm btn-danger">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -66,20 +58,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Are you sure you want to delete this user account?</p>
+                    <p>Are you sure you want to delete this outlet?</p>
                     <div class="alert alert-warning">
                         <strong>Name:</strong> {{ $deleteName ?? '' }}<br>
-                        <strong>Email:</strong> {{ $deleteEmail ?? '' }}<br>
-                        <strong>Role:</strong> {{ $deleteRole ?? '' }}<br>
-                        @isset($deleteOutlet)
-                            <strong>Outlet:</strong> {{ $deleteOutlet ?? 'N/A' }}
-                        @endisset
+                        <strong>Address:</strong> {{ $deleteAddress ?? '' }}
                     </div>
                     <p class="text-danger">This action cannot be undone!</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" wire:click="deleteUser">Delete Account</button>
+                    <button type="button" class="btn btn-danger" wire:click="deleteOutlet">Delete Outlet</button>
                 </div>
             </div>
         </div>
@@ -91,14 +79,14 @@
                 let dataTable = null;
 
                 function initializeDataTable() {
-                    if ($.fn.DataTable.isDataTable('#accounts-table')) {
-                        $('#accounts-table').DataTable().destroy();
+                    if ($.fn.DataTable.isDataTable('#outlets-table')) {
+                        $('#outlets-table').DataTable().destroy();
                     }
 
-                    dataTable = $('#accounts-table').DataTable({
+                    dataTable = $('#outlets-table').DataTable({
                         responsive: true,
                         columnDefs: [
-                            { orderable: false, targets: [5] } // Updated column index for actions
+                            { orderable: false, targets: [5] } // Disable sorting for actions column
                         ],
                         initComplete: function() {
                             $('.dataTables_filter input').addClass('form-control');
@@ -115,12 +103,10 @@
                     initializeDataTable();
                 });
 
-                // Modal controls
                 Livewire.on('showDeleteModal', () => {
                     const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
                     modal.show();
 
-                    // Reinitialize DataTable after modal shows
                     setTimeout(initializeDataTable, 100);
                 });
 
@@ -128,7 +114,6 @@
                     const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
                     modal.hide();
 
-                    // Reinitialize DataTable after modal hides
                     setTimeout(initializeDataTable, 100);
                 });
             });

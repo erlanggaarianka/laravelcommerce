@@ -3,6 +3,7 @@
 namespace App\Livewire\Account;
 
 use App\Models\User;
+use App\Models\Outlet;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -16,31 +17,38 @@ class AccountList extends Component
     public $deleteName;
     public $deleteEmail;
     public $deleteRole;
+    public $deleteOutlet;
 
-    protected $listeners = ['refreshComponent' => '$refresh'];
+    protected $listeners = ['refreshComponent' => '$refresh', 'accountsUpdated' => '$refresh'];
 
     public function render()
     {
-        $accounts = User::when($this->searchTerm, function ($query) {
-            return $query->where('name', 'like', '%'.$this->searchTerm.'%')
-                         ->orWhere('email', 'like', '%'.$this->searchTerm.'%');
-        })
-        ->latest()
-        ->paginate(10);
+        $accounts = User::with('outlet')
+            ->when($this->searchTerm, function ($query) {
+                return $query->where(function($q) {
+                    $q->where('name', 'like', '%'.$this->searchTerm.'%')
+                      ->orWhere('email', 'like', '%'.$this->searchTerm.'%')
+                      ->orWhereHas('outlet', function($outletQuery) {
+                          $outletQuery->where('name', 'like', '%'.$this->searchTerm.'%');
+                      });
+                });
+            })
+            ->latest()
+            ->paginate(10);
 
         return view('livewire.account.account-list', compact('accounts'));
     }
 
     public function confirmDelete($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('outlet')->findOrFail($id);
         $this->deleteId = $user->id;
         $this->deleteName = $user->name;
         $this->deleteEmail = $user->email;
         $this->deleteRole = $user->role;
+        $this->deleteOutlet = $user->outlet ? $user->outlet->name : 'N/A';
 
         $this->dispatch('showDeleteModal');
-        $this->dispatch('initializeDataTable');
     }
 
     public function deleteUser()

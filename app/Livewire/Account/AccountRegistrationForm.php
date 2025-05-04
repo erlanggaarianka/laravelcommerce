@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Account;
 
+use App\Models\Outlet;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
@@ -13,7 +14,9 @@ class AccountRegistrationForm extends Component
     public $email;
     public $role;
     public $password;
-    public $password_confirmation; // Added for confirmation
+    public $password_confirmation;
+    public $outlet_id;
+    public $outlets = [];
 
     // Modal properties
     public $showConfirmationModal = false;
@@ -21,6 +24,8 @@ class AccountRegistrationForm extends Component
 
     public function mount($id = null)
     {
+        $this->outlets = Outlet::all(); // Load all outlets
+
         $this->id = $id;
 
         if ($this->id) {
@@ -28,6 +33,7 @@ class AccountRegistrationForm extends Component
             $this->name = $user->name;
             $this->email = $user->email;
             $this->role = $user->role;
+            $this->outlet_id = $user->outlet_id;
         }
     }
 
@@ -42,6 +48,14 @@ class AccountRegistrationForm extends Component
         return $rules;
     }
 
+    public function updatedRole($value)
+    {
+        // Reset outlet if role changes to Owner
+        if ($value === 'Owner') {
+            $this->outlet_id = null;
+        }
+    }
+
     public function messages()
     {
         return [
@@ -53,6 +67,8 @@ class AccountRegistrationForm extends Component
             'password.min' => 'Password must be at least 8 characters.',
             'role.required' => 'Role is required.',
             'role.in' => 'Role must be either Cashier or Owner.',
+            'outlet_id.required' => 'Outlet is required for Cashiers.',
+            'outlet_id.exists' => 'Selected outlet does not exist.',
         ];
     }
 
@@ -75,12 +91,9 @@ class AccountRegistrationForm extends Component
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->role,
+            'password' => Hash::make($this->password),
+            'outlet_id' => $this->role === 'Cashier' ? $this->outlet_id : null,
         ];
-
-        // Only update password if it's provided (for edit) or required (for create)
-        if (!empty($validated['password'])) {
-            $userData['password'] = Hash::make($validated['password']);
-        }
 
         if ($this->id) {
             $user = User::findOrFail($this->id);

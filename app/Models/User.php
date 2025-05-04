@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'outlet_id',
     ];
 
     /**
@@ -44,5 +46,45 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relationship with Outlet
+     */
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
+
+    /**
+     * Scope for Cashiers
+     */
+    public function scopeCashiers($query)
+    {
+        return $query->where('role', 'Cashier');
+    }
+
+    /**
+     * Scope for Owners
+     */
+    public function scopeOwners($query)
+    {
+        return $query->where('role', 'Owner');
+    }
+
+    /**
+     * Check if user is a cashier
+     */
+    public function isCashier()
+    {
+        return $this->role === 'Cashier';
+    }
+
+    /**
+     * Check if user is an owner
+     */
+    public function isOwner()
+    {
+        return $this->role === 'Owner';
     }
 }

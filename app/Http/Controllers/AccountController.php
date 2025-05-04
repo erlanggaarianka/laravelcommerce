@@ -13,7 +13,7 @@ class AccountController extends Controller
 
     public function create()
     {
-        return view('account.create-edit');
+        return view('account.create-edit', ['id' => null]);
     }
 
     public function edit($id)

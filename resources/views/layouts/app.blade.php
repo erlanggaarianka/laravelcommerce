@@ -58,7 +58,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link {{ request()->routeIs('outlet') ? 'active' : 'text-white' }}">
+                            <a href="{{ route('outlet.list') }}" class="nav-link {{ request()->routeIs('outlet.list') ? 'active' : 'text-white' }}">
                                 Outlet
                             </a>
                         </li>

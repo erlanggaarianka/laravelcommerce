@@ -42,6 +42,25 @@
                 @enderror
             </div>
 
+            <div class="col-md-4 col-lg-12" x-data="{ showOutletField: @entangle('role') }"
+                 x-show="showOutletField === 'Cashier'">
+                <label for="validationCustomOutlet" class="form-label">Outlet</label>
+                <div class="input-group has-validation">
+                    <select wire:model.defer='outlet_id' wire:loading.attr='disabled'
+                            class="form-select" id="validationCustomOutlet">
+                        <option value="">Select an outlet</option>
+                        @foreach($outlets as $outlet)
+                            <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                @error('outlet_id')
+                    <div class="text-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+
             <div class="col-md-4 col-lg-12">
                 <label for="validationCustomPassword" class="form-label">Password</label>
                 <div class="input-group has-validation">
@@ -89,7 +108,10 @@
                     <div class="alert alert-info mt-3">
                         <strong>Name:</strong> {{ $name }}<br>
                         <strong>Email:</strong> {{ $email }}<br>
-                        <strong>Role:</strong> {{ $role }}
+                        <strong>Role:</strong> {{ $role }}<br>
+                        @if($role === 'Cashier' && $outlet_id)
+                            <strong>Outlet:</strong> {{ $outlets->firstWhere('id', $outlet_id)->name ?? 'N/A' }}
+                        @endif
                     </div>
                 </div>
                 <div class="modal-footer">
