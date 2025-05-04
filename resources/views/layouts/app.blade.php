@@ -48,7 +48,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('products') }}" class="nav-link {{ request()->routeIs('products') ? 'active' : 'text-white' }}">
+                            <a href="{{ route('products.list') }}" class="nav-link {{ request()->routeIs('products.list') ? 'active' : 'text-white' }}">
                                 Products
                             </a>
                         </li>

@@ -30,4 +30,10 @@ class Outlet extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    // app/Models/Outlet.php
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
 }

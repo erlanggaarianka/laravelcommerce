@@ -17,6 +17,13 @@ Route::get('/products', function () {
 
 // Account Routes
 Route::middleware(['auth'])->group(function () {
+    // Product Management
+    Route::prefix('products')->group(function () {
+        Route::get('/', [App\Http\Controllers\ProductController::class, 'list'])->name('products.list');
+        Route::get('/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
+        Route::get('/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
+    });
+
     // Outlet Management
     Route::prefix('outlet')->group(function () {
         Route::get('/', [App\Http\Controllers\OutletController::class, 'list'])->name('outlet.list');
