@@ -17,6 +17,12 @@ Route::get('/products', function () {
 
 // Account Routes
 Route::middleware(['auth'])->group(function () {
+    // Inventory Management
+    Route::prefix('inventory')->group(function () {
+        Route::get('/', [App\Http\Controllers\InventoryController::class, 'list'])->name('inventory.list');
+        Route::get('/adjust', [App\Http\Controllers\InventoryController::class, 'adjust'])->name('inventory.adjust');
+    });
+
     // Product Management
     Route::prefix('products')->group(function () {
         Route::get('/', [App\Http\Controllers\ProductController::class, 'list'])->name('products.list');

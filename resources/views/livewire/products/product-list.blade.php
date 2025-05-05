@@ -28,7 +28,7 @@
                                 <td>
                                     @if($product->image)
                                         <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->name }}"
-                                            class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;">
+                                            class="img-thumbnail" style="width: 100px; height: 100px; object-fit: cover;">
                                     @else
                                         <div class="bg-light d-flex align-items-center justify-content-center"
                                              style="width: 50px; height: 50px;">

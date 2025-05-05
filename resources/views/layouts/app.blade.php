@@ -48,13 +48,13 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('products.list') }}" class="nav-link {{ request()->routeIs('products.list') ? 'active' : 'text-white' }}">
-                                Products
+                            <a href="{{ route('inventory.list') }}" class="nav-link {{ request()->routeIs('inventory.list') ? 'active' : 'text-white' }}">
+                                Inventory
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link {{ request()->routeIs('inventory') ? 'active' : 'text-white' }}">
-                                Inventory
+                            <a href="{{ route('products.list') }}" class="nav-link {{ request()->routeIs('products.list') ? 'active' : 'text-white' }}">
+                                Products
                             </a>
                         </li>
                         <li>
