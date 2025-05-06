@@ -36,4 +36,9 @@ class Outlet extends Model
     {
         return $this->belongsToMany(Product::class);
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
 }

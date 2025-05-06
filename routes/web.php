@@ -17,6 +17,13 @@ Route::get('/products', function () {
 
 // Account Routes
 Route::middleware(['auth'])->group(function () {
+    // Transaction Management
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [App\Http\Controllers\TransactionController::class, 'list'])->name('transactions.list');
+        Route::get('/create', [App\Http\Controllers\TransactionController::class, 'create'])->name('transactions.create');
+        Route::get('/receipt/{id}', [App\Http\Controllers\TransactionController::class, 'receipt'])->name('transactions.receipt');
+    });
+
     // Inventory Management
     Route::prefix('inventory')->group(function () {
         Route::get('/', [App\Http\Controllers\InventoryController::class, 'list'])->name('inventory.list');

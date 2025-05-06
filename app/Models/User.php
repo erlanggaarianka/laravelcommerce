@@ -87,4 +87,9 @@ class User extends Authenticatable
     {
         return $this->role === 'Owner';
     }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class); // removed the cashier_id parameter
+    }
 }

@@ -43,7 +43,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link {{ request()->routeIs('transactions') ? 'active' : 'text-white' }}">
+                            <a href="{{ route('transactions.list') }}" class="nav-link {{ request()->routeIs('transactions.list') ? 'active' : 'text-white' }}">
                                 Transactions
                             </a>
                         </li>
