@@ -68,7 +68,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link {{ request()->routeIs('reports') ? 'active' : 'text-white' }}">
+                            <a href="{{ route('reports.view') }}" class="nav-link {{ request()->routeIs('reports.view') ? 'active' : 'text-white' }}">
                                 Reports
                             </a>
                         </li>

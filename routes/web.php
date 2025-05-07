@@ -48,4 +48,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account', [App\Http\Controllers\AccountController::class, 'list'])->name('account.list');
     Route::get('/account/create', [App\Http\Controllers\AccountController::class, 'create'])->name('account.create');
     Route::get('/account/{id}', [App\Http\Controllers\AccountController::class, 'edit'])->name('account.edit');
+
+    // Report Management
+    Route::prefix('reports')->group(function () {
+        Route::get('/', [App\Http\Controllers\ReportController::class, 'view'])->name('reports.view');
+    });
 });
