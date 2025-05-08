@@ -16,22 +16,22 @@
                         <!-- Report Tabs -->
                         <ul class="nav nav-tabs mb-4" id="reportTabs" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="inventory-logs-tab" data-bs-toggle="tab" 
-                                    data-bs-target="#inventory-logs" type="button" role="tab" 
+                                <button class="nav-link active" id="inventory-logs-tab" data-bs-toggle="tab"
+                                    data-bs-target="#inventory-logs" type="button" role="tab"
                                     aria-controls="inventory-logs" aria-selected="true">
                                     Inventory Logs
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="sales-tab" data-bs-toggle="tab" 
-                                    data-bs-target="#sales" type="button" role="tab" 
+                                <button class="nav-link" id="sales-tab" data-bs-toggle="tab"
+                                    data-bs-target="#sales" type="button" role="tab"
                                     aria-controls="sales" aria-selected="false">
                                     Sales Report
                                 </button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="cashier-tab" data-bs-toggle="tab" 
-                                    data-bs-target="#cashier" type="button" role="tab" 
+                                <button class="nav-link" id="cashier-tab" data-bs-toggle="tab"
+                                    data-bs-target="#cashier" type="button" role="tab"
                                     aria-controls="cashier" aria-selected="false">
                                     Cashier Performance
                                 </button>
@@ -41,21 +41,19 @@
                         <!-- Tab Contents -->
                         <div class="tab-content" id="reportTabsContent">
                             <!-- Inventory Logs Tab -->
-                            <div class="tab-pane fade show active" id="inventory-logs" role="tabpanel" 
+                            <div class="tab-pane fade show active" id="inventory-logs" role="tabpanel"
                                 aria-labelledby="inventory-logs-tab">
                                 <livewire:reports.inventory-logs />
                             </div>
 
                             <!-- Sales Report Tab -->
-                            <div class="tab-pane fade" id="sales" role="tabpanel" 
+                            <div class="tab-pane fade" id="sales" role="tabpanel"
                                 aria-labelledby="sales-tab">
-                                <div class="alert alert-info">
-                                    Sales report will be displayed here. Coming soon!
-                                </div>
+                                <livewire:reports.sales-report />
                             </div>
 
                             <!-- Cashier Performance Tab -->
-                            <div class="tab-pane fade" id="cashier" role="tabpanel" 
+                            <div class="tab-pane fade" id="cashier" role="tabpanel"
                                 aria-labelledby="cashier-tab">
                                 <div class="alert alert-info">
                                     Cashier performance report will be displayed here. Coming soon!
