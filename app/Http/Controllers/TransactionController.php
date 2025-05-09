@@ -24,6 +24,6 @@ class TransactionController extends Controller
         $transaction = Transaction::with(['items.product', 'user', 'outlet'])->findOrFail($id);
         $outlet = $transaction->outlet;
 
-        return view('transactions.', compact('transaction', 'outlet'));
+        return view('transactions.receipt', compact('transaction', 'outlet'));
     }
 }

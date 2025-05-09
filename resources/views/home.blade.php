@@ -20,7 +20,7 @@
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h6 class="card-subtitle mb-2">Today's Sales</h6>
-                        <h3 class="card-title text-success">@money($todaySales)</h3>
+                        <h3 class="card-title text-success">{{ '$' . $todaySales }}</h3>
                         <p class="small text-muted mb-0">{{ $todayTransactions }} transactions</p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h6 class="card-subtitle mb-2">Monthly Sales</h6>
-                        <h3 class="card-title text-primary">@money($monthlySales)</h3>
+                        <h3 class="card-title text-primary">{{ '$' . $monthlySales }}</h3>
                         <p class="small text-muted mb-0">{{ $monthlyTransactions }} transactions</p>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         <h6 class="card-subtitle mb-2">Top Product</h6>
                         {{-- Change $topProduct to $topProductModel --}}
                         <h5 class="card-title">{{ $topProductModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">@money($topProductSales ?? 0) sales</p>
+                        <p class="small text-muted mb-0">${{ $topProductSales ?? 0 }} sales</p>
                     </div>
                 </div>
             </a>
@@ -75,7 +75,7 @@
                         <h6 class="card-subtitle mb-2">Top Cashier</h6>
                         {{-- Change $topCashier to $topCashierModel --}}
                         <h5 class="card-title">{{ $topCashierModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">@money($topCashierSales ?? 0) sales</p>
+                        <p class="small text-muted mb-0">${{ $topCashierSales ?? 0 }} sales</p>
                     </div>
                 </div>
             </a>
@@ -89,7 +89,7 @@
                         <h6 class="card-subtitle mb-2">Top Outlet</h6>
                         {{-- Change $topOutlet to $topOutletModel --}}
                         <h5 class="card-title">{{ $topOutletModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">@money($topOutletSales ?? 0) sales</p>
+                        <p class="small text-muted mb-0">${{ $topOutletSales ?? 0 }} sales</p>
                     </div>
                 </div>
             </a>
@@ -142,8 +142,8 @@
                                     <th>Date</th>
                                     <th>Cashier</th>
                                     <th>Outlet</th>
-                                    <th class="text-end">Amount</th>
                                     <th>Status</th>
+                                    <th class="text-end">Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,12 +157,12 @@
                                         <td>{{ $transaction->created_at->format('d M H:i') }}</td>
                                         <td>{{ $transaction->user->name }}</td>
                                         <td>{{ $transaction->outlet->name }}</td>
-                                        <td class="text-end">@money($transaction->grand_total)</td>
                                         <td>
                                             <span class="badge bg-{{ $transaction->status === 'completed' ? 'success' : ($transaction->status === 'pending' ? 'warning' : 'danger') }}">
                                                 {{ ucfirst($transaction->status) }}
                                             </span>
                                         </td>
+                                        <td class="text-end">${{ $transaction->grand_total }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -210,7 +210,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return 'Rp' + value.toLocaleString();
+                                return '$' + value.toLocaleString();
                             }
                         }
                     }
