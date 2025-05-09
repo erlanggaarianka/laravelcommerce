@@ -55,9 +55,7 @@
                             <!-- Cashier Performance Tab -->
                             <div class="tab-pane fade" id="cashier" role="tabpanel"
                                 aria-labelledby="cashier-tab">
-                                <div class="alert alert-info">
-                                    Cashier performance report will be displayed here. Coming soon!
-                                </div>
+                                <livewire:reports.cashier-performance />
                             </div>
                         </div>
                     </div>

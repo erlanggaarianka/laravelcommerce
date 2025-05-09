@@ -9,14 +9,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/products', function () {
-    return view('products.list');
-})->name('products');
-
 // Account Routes
 Route::middleware(['auth'])->group(function () {
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
     // Transaction Management
     Route::prefix('transactions')->group(function () {
         Route::get('/', [App\Http\Controllers\TransactionController::class, 'list'])->name('transactions.list');

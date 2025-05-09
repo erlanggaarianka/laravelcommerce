@@ -87,9 +87,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">Detailed Sales</h5>
-            <button class="btn btn-sm btn-success" wire:click="exportExcel">
+            {{-- <button class="btn btn-sm btn-success" wire:click="exportExcel">
                 <i class="fas fa-file-excel me-1"></i> Export
-            </button>
+            </button> --}}
         </div>
         <div class="card-body">
             <div class="table-responsive">
