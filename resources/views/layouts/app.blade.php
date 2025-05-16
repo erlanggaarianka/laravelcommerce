@@ -37,41 +37,45 @@
                     <hr>
 
                     <ul class="nav nav-pills flex-column mb-auto">
-                        <li class="nav-item">
-                            <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : 'text-white' }}" aria-current="page">
-                                Home
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('transactions.list') }}" class="nav-link {{ request()->routeIs('transactions.list') ? 'active' : 'text-white' }}">
-                                Transactions
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('inventory.list') }}" class="nav-link {{ request()->routeIs('inventory.list') ? 'active' : 'text-white' }}">
-                                Inventory
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('products.list') }}" class="nav-link {{ request()->routeIs('products.list') ? 'active' : 'text-white' }}">
-                                Products
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('outlet.list') }}" class="nav-link {{ request()->routeIs('outlet.list') ? 'active' : 'text-white' }}">
-                                Outlet
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('account.list') }}" class="nav-link {{ request()->routeIs('account.list') ? 'active' : 'text-white' }}">
-                                Account
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('reports.view') }}" class="nav-link {{ request()->routeIs('reports.view') ? 'active' : 'text-white' }}">
-                                Reports
-                            </a>
-                        </li>
+                        @auth
+                            <li class="nav-item">
+                                <a href="{{ route('home') }}" class="nav-link {{ request()->routeIs('home') ? 'active' : 'text-white' }}" aria-current="page">
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('transactions.list') }}" class="nav-link {{ request()->routeIs('transactions.list') ? 'active' : 'text-white' }}">
+                                    Transactions
+                                </a>
+                            </li>
+                            @if (auth()->user()->role === 'Owner')
+                                <li>
+                                    <a href="{{ route('inventory.list') }}" class="nav-link {{ request()->routeIs('inventory.list') ? 'active' : 'text-white' }}">
+                                        Inventory
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('products.list') }}" class="nav-link {{ request()->routeIs('products.list') ? 'active' : 'text-white' }}">
+                                        Products
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('outlet.list') }}" class="nav-link {{ request()->routeIs('outlet.list') ? 'active' : 'text-white' }}">
+                                        Outlet
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('account.list') }}" class="nav-link {{ request()->routeIs('account.list') ? 'active' : 'text-white' }}">
+                                        Account
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('reports.view') }}" class="nav-link {{ request()->routeIs('reports.view') ? 'active' : 'text-white' }}">
+                                        Reports
+                                    </a>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
                     <hr>
                     <div class="dropdown">
@@ -80,10 +84,6 @@
                             <strong>{{ Auth::user()->name }} ({{ Auth::user()->role }})</strong>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
-                            <li><a class="dropdown-item" href="#">New project...</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                     onclick="event.preventDefault();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckUserRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -21,32 +22,34 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Inventory Management
-    Route::prefix('inventory')->group(function () {
+    Route::prefix('inventory')->middleware(CheckUserRole::class.':Owner')->group(function () {
         Route::get('/', [App\Http\Controllers\InventoryController::class, 'list'])->name('inventory.list');
         Route::get('/adjust', [App\Http\Controllers\InventoryController::class, 'adjust'])->name('inventory.adjust');
     });
 
     // Product Management
-    Route::prefix('products')->group(function () {
+    Route::prefix('products')->middleware(CheckUserRole::class.':Owner')->group(function () {
         Route::get('/', [App\Http\Controllers\ProductController::class, 'list'])->name('products.list');
         Route::get('/create', [App\Http\Controllers\ProductController::class, 'create'])->name('products.create');
         Route::get('/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
     });
 
     // Outlet Management
-    Route::prefix('outlet')->group(function () {
+    Route::prefix('outlet')->middleware(CheckUserRole::class.':Owner')->group(function () {
         Route::get('/', [App\Http\Controllers\OutletController::class, 'list'])->name('outlet.list');
         Route::get('/create', [App\Http\Controllers\OutletController::class, 'create'])->name('outlet.create');
         Route::get('/{id}', [App\Http\Controllers\OutletController::class, 'edit'])->name('outlet.edit');
     });
 
     // Account Management
-    Route::get('/account', [App\Http\Controllers\AccountController::class, 'list'])->name('account.list');
-    Route::get('/account/create', [App\Http\Controllers\AccountController::class, 'create'])->name('account.create');
-    Route::get('/account/{id}', [App\Http\Controllers\AccountController::class, 'edit'])->name('account.edit');
+    Route::prefix('account')->middleware(CheckUserRole::class.':Owner')->group(function () {
+        Route::get('/', [App\Http\Controllers\AccountController::class, 'list'])->name('account.list');
+        Route::get('/create', [App\Http\Controllers\AccountController::class, 'create'])->name('account.create');
+        Route::get('/{id}', [App\Http\Controllers\AccountController::class, 'edit'])->name('account.edit');
+    });
 
     // Report Management
-    Route::prefix('reports')->group(function () {
+    Route::prefix('reports')->middleware(CheckUserRole::class.':Owner')->group(function () {
         Route::get('/', [App\Http\Controllers\ReportController::class, 'view'])->name('reports.view');
     });
 });

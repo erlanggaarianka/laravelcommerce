@@ -50,7 +50,7 @@
                 </a>
             @endif --}}
 
-            <p class="mt-5 mb-3 text-muted">© {{ date('Y') }} GOOD CREDIT</p>
+            <p class="mt-5 mb-3 text-muted">© {{ date('Y') }} {{ config('app.name', 'GOOD CREDIT') }}</p>
         </form>
     </main>
 </div>
