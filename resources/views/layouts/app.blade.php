@@ -65,6 +65,11 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('payment-methods.list') }}" class="nav-link {{ request()->routeIs('payment-methods.list') ? 'active' : 'text-white' }}">
+                                        Payment Method
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ route('account.list') }}" class="nav-link {{ request()->routeIs('account.list') ? 'active' : 'text-white' }}">
                                         Account
                                     </a>
@@ -74,7 +79,7 @@
                                         Reports
                                     </a>
                                 </li>
-                            @endif
+                                @endif
                         @endauth
                     </ul>
                     <hr>

@@ -29,10 +29,10 @@
                     <div class="col-md-6">
                         <label class="form-label">Payment Method *</label>
                         <select class="form-select" wire:model="paymentMethod">
-                            <option value="cash">Cash</option>
-                            <option value="credit_card">Credit Card</option>
-                            <option value="debit_card">Debit Card</option>
-                            <option value="e_wallet">E-Wallet</option>
+                            <option value="">Select Payment Method</option>
+                            @foreach(\App\Models\PaymentMethod::active()->get() as $method)
+                                <option value="{{ $method->code }}">{{ $method->name }}</option>
+                            @endforeach
                         </select>
                         @error('paymentMethod') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>

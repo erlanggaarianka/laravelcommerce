@@ -20,7 +20,7 @@
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h6 class="card-subtitle mb-2">Today's Sales</h6>
-                        <h3 class="card-title text-success">{{ '$' . $todaySales }}</h3>
+                        <h3 class="card-title text-success">{{ 'Rp. ' . $todaySales }}</h3>
                         <p class="small text-muted mb-0">{{ $todayTransactions }} transactions</p>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h6 class="card-subtitle mb-2">Monthly Sales</h6>
-                        <h3 class="card-title text-primary">{{ '$' . $monthlySales }}</h3>
+                        <h3 class="card-title text-primary">{{ 'Rp. ' . $monthlySales }}</h3>
                         <p class="small text-muted mb-0">{{ $monthlyTransactions }} transactions</p>
                     </div>
                 </div>
@@ -54,46 +54,48 @@
         </div>
 
         <!-- Top Product -->
-        <div class="col-md-6 col-lg-2 mb-3">
+        <div class="{{ Auth::user()->role === 'Owner' ? 'col-md-6 col-lg-2' : 'col-md-6 col-lg-6' }} mb-3">
             <a href="{{ route('reports.view') }}?groupBy=product" class="card-link">
                 <div class="card h-100">
                     <div class="card-body text-center">
                         <h6 class="card-subtitle mb-2">Top Product</h6>
                         {{-- Change $topProduct to $topProductModel --}}
                         <h5 class="card-title">{{ $topProductModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">${{ $topProductSales ?? 0 }} sales</p>
+                        <p class="small text-muted mb-0">Rp. {{ $topProductSales ?? 0 }} sales</p>
                     </div>
                 </div>
             </a>
         </div>
 
-        <!-- Best Cashier -->
-        <div class="col-md-6 col-lg-2 mb-3">
-            <a href="{{ route('reports.view') }}#cashier" class="card-link">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h6 class="card-subtitle mb-2">Top Cashier</h6>
-                        {{-- Change $topCashier to $topCashierModel --}}
-                        <h5 class="card-title">{{ $topCashierModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">${{ $topCashierSales ?? 0 }} sales</p>
+        @if (Auth::user()->role === 'Owner')
+            <!-- Best Cashier -->
+            <div class="col-md-6 col-lg-2 mb-3">
+                <a href="{{ route('reports.view') }}#cashier" class="card-link">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h6 class="card-subtitle mb-2">Top Cashier</h6>
+                            {{-- Change $topCashier to $topCashierModel --}}
+                            <h5 class="card-title">{{ $topCashierModel->name ?? 'N/A' }}</h5>
+                            <p class="small text-muted mb-0">Rp. {{ $topCashierSales ?? 0 }} sales</p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
 
-        <!-- Outlet Performance -->
-        <div class="col-md-6 col-lg-2 mb-3">
-            <a href="{{ route('reports.view') }}?groupBy=outlet" class="card-link">
-                <div class="card h-100">
-                    <div class="card-body text-center">
-                        <h6 class="card-subtitle mb-2">Top Outlet</h6>
-                        {{-- Change $topOutlet to $topOutletModel --}}
-                        <h5 class="card-title">{{ $topOutletModel->name ?? 'N/A' }}</h5>
-                        <p class="small text-muted mb-0">${{ $topOutletSales ?? 0 }} sales</p>
+            <!-- Outlet Performance -->
+            <div class="col-md-6 col-lg-2 mb-3">
+                <a href="{{ route('reports.view') }}?groupBy=outlet" class="card-link">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <h6 class="card-subtitle mb-2">Top Outlet</h6>
+                            {{-- Change $topOutlet to $topOutletModel --}}
+                            <h5 class="card-title">{{ $topOutletModel->name ?? 'N/A' }}</h5>
+                            <p class="small text-muted mb-0">Rp. {{ $topOutletSales ?? 0 }} sales</p>
+                        </div>
                     </div>
-                </div>
-            </a>
-        </div>
+                </a>
+            </div>
+        @endif
     </div>
 
     <!-- Charts Row -->
@@ -162,7 +164,7 @@
                                                 {{ ucfirst($transaction->status) }}
                                             </span>
                                         </td>
-                                        <td class="text-end">${{ $transaction->grand_total }}</td>
+                                        <td class="text-end">Rp. {{ $transaction->grand_total }}</td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -210,7 +212,7 @@
                         beginAtZero: true,
                         ticks: {
                             callback: function(value) {
-                                return '$' + value.toLocaleString();
+                                return 'Rp. ' + value.toLocaleString();
                             }
                         }
                     }

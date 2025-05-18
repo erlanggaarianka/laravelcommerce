@@ -34,6 +34,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
     });
 
+    Route::prefix('payment-methods')->middleware(CheckUserRole::class.':Owner')->group(function () {
+        Route::get('/', [App\Http\Controllers\PaymentMethodController::class, 'list'])->name('payment-methods.list');
+        Route::get('/create', [App\Http\Controllers\PaymentMethodController::class, 'create'])->name('payment-methods.create');
+        Route::get('/{id}', [App\Http\Controllers\PaymentMethodController::class, 'edit'])->name('payment-methods.edit');
+    });
+
     // Outlet Management
     Route::prefix('outlet')->middleware(CheckUserRole::class.':Owner')->group(function () {
         Route::get('/', [App\Http\Controllers\OutletController::class, 'list'])->name('outlet.list');
