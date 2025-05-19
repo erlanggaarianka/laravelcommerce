@@ -26,6 +26,16 @@
                         </select>
                         @error('outletId') <span class="text-danger">{{ $message }}</span> @enderror
                     </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Transaction Type *</label>
+                        <select class="form-select" wire:model="transactionTypeId" required>
+                            <option value="">Select Type</option>
+                            @foreach(\App\Models\TransactionType::active()->get() as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('transactionTypeId') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
                     <div class="col-md-6">
                         <label class="form-label">Payment Method *</label>
                         <select class="form-select" wire:model="paymentMethod">

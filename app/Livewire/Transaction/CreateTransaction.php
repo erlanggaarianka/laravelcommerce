@@ -32,6 +32,8 @@ class CreateTransaction extends Component
     #[Validate('required|in:cash,credit_card,debit_card,e_wallet')]
     public $paymentMethod = 'cash';
 
+    public $transactionTypeId = 0;
+
     #[Validate('required|numeric|min:0')]
     public $cashReceived = 0;
 
@@ -159,6 +161,7 @@ class CreateTransaction extends Component
             'cash_received' => $this->cashReceived,
             'change' => $this->change,
             'payment_method' => $this->paymentMethod,
+            'transaction_type_id' => $this->transactionTypeId,
             'status' => 'completed',
             'notes' => $this->notes,
         ]);

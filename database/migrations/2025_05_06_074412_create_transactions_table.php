@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('grand_total', 12, 2);
             $table->decimal('cash_received', 12, 2);
             $table->decimal('change', 12, 2);
-            $table->enum('payment_method', ['cash', 'credit_card', 'debit_card', 'e_wallet']);
+            $table->text('payment_method');
             $table->enum('status', ['completed', 'pending', 'cancelled'])->default('completed');
             $table->text('notes')->nullable();
             $table->timestamps();

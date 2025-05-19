@@ -70,6 +70,11 @@
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('transaction-types.list') }}" class="nav-link {{ request()->routeIs('transaction-types.list') ? 'active' : 'text-white' }}">
+                                        Transaction Type
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="{{ route('account.list') }}" class="nav-link {{ request()->routeIs('account.list') ? 'active' : 'text-white' }}">
                                         Account
                                     </a>

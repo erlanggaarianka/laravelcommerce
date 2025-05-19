@@ -18,6 +18,7 @@ class Transaction extends Model
         'grand_total',
         'cash_received',
         'change',
+        'transaction_type_id',
         'payment_method',
         'status',
         'notes'
@@ -46,6 +47,11 @@ class Transaction extends Model
     public function items()
     {
         return $this->hasMany(TransactionItem::class);
+    }
+
+    public function transactionType()
+    {
+        return $this->belongsTo(TransactionType::class);
     }
 
     public function scopeForCashier($query, $userId)

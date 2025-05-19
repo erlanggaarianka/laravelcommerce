@@ -77,6 +77,7 @@
                             <th>Cashier</th>
                             <th class="text-end">Items</th>
                             <th class="text-end">Total</th>
+                            <th>Type</th>
                             <th>Payment Method</th>
                             <th>Status</th>
                             <th class="text-end">Actions</th>
@@ -91,6 +92,7 @@
                                 <td>{{ $transaction->user->name }}</td>
                                 <td class="text-end">{{ $transaction->items->sum('quantity') }}</td>
                                 <td class="text-end">{{ number_format($transaction->grand_total, 2) }}</td>
+                                <td>{{ $transaction->transactionType->name ?? 'N/A' }}</td>
                                 <td>
                                     <span class="badge bg-info">
                                         {{ ucfirst(str_replace('_', ' ', $transaction->payment_method)) }}
