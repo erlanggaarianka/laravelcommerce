@@ -22,10 +22,10 @@
             </select>
         </div>
         <div class="col-md-2">
-            <input type="date" class="form-control" wire:model="dateFrom" placeholder="From Date">
+            <input type="date" class="form-control" wire:model.live="dateFrom" placeholder="From Date">
         </div>
         <div class="col-md-2">
-            <input type="date" class="form-control" wire:model="dateTo" placeholder="To Date">
+            <input type="date" class="form-control" wire:model.live="dateTo" placeholder="To Date">
         </div>
         <div class="col-md-1">
             <button class="btn btn-outline-secondary w-100" wire:click="resetFilters">
