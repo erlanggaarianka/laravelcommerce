@@ -13,7 +13,7 @@ class SalesReport extends Component
 {
     use WithPagination;
 
-    public $dateRange = 'today';
+    public $dateRange = 'this_month';
     public $customStart;
     public $customEnd;
     public $outletFilter = '';
@@ -58,7 +58,7 @@ class SalesReport extends Component
         [$startDate, $endDate] = $this->getDates();
 
         $query = Transaction::with(['items.product', 'outlet'])
-            ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereBetween('created_at', [$startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s')])
             ->where('status', 'completed');
 
         if ($this->outletFilter) {

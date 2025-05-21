@@ -2,7 +2,7 @@
     <!-- Filters -->
     <div class="row mb-4 g-2">
         <div class="col-md-3">
-            <select class="form-select" wire:model="dateRange">
+            <select class="form-select" wire:model.live="dateRange">
                 <option value="today">Today</option>
                 <option value="yesterday">Yesterday</option>
                 <option value="this_week">This Week</option>
@@ -15,15 +15,15 @@
 
         @if($dateRange === 'custom')
             <div class="col-md-3">
-                <input type="date" class="form-control" wire:model="customStart">
+                <input type="date" class="form-control" wire:model.live="customStart">
             </div>
             <div class="col-md-3">
-                <input type="date" class="form-control" wire:model="customEnd">
+                <input type="date" class="form-control" wire:model.live="customEnd">
             </div>
         @endif
 
         <div class="col-md-3">
-            <select class="form-select" wire:model="outletFilter">
+            <select class="form-select" wire:model.live="outletFilter">
                 <option value="">All Outlets</option>
                 @foreach($outlets as $outlet)
                     <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
@@ -116,8 +116,8 @@
                                     </div>
                                 </td>
                                 <td class="text-end">{{ $cashier->transaction_count }}</td>
-                                <td class="text-end">@money($cashier->total_sales)</td>
-                                <td class="text-end">@money($cashier->avg_sale)</td>
+                                <td class="text-end">{{ $cashier->total_sales }}</td>
+                                <td class="text-end">{{ $cashier->avg_sale }}</td>
                             </tr>
                         @endforeach
                     </tbody>

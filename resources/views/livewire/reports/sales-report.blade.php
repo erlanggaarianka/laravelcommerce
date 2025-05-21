@@ -2,7 +2,7 @@
     <!-- Filters -->
     <div class="row mb-4 g-2">
         <div class="col-md-2">
-            <select class="form-select" wire:model="dateRange">
+            <select class="form-select" wire:model.live="dateRange">
                 <option value="today">Today</option>
                 <option value="yesterday">Yesterday</option>
                 <option value="this_week">This Week</option>
@@ -15,15 +15,15 @@
 
         @if($dateRange === 'custom')
             <div class="col-md-2">
-                <input type="date" class="form-control" wire:model="customStart">
+                <input type="date" class="form-control" wire:model.live="customStart">
             </div>
             <div class="col-md-2">
-                <input type="date" class="form-control" wire:model="customEnd">
+                <input type="date" class="form-control" wire:model.live="customEnd">
             </div>
         @endif
 
         <div class="col-md-2">
-            <select class="form-select" wire:model="outletFilter">
+            <select class="form-select" wire:model.live="outletFilter">
                 <option value="">All Outlets</option>
                 @foreach($outlets as $outlet)
                     <option value="{{ $outlet->id }}">{{ $outlet->name }}</option>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="col-md-2">
-            <select class="form-select" wire:model="productFilter">
+            <select class="form-select" wire:model.live="productFilter">
                 <option value="">All Products</option>
                 @foreach($products as $product)
                     <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -41,7 +41,7 @@
         </div>
 
         <div class="col-md-2">
-            <select class="form-select" wire:model="groupBy">
+            <select class="form-select" wire:model.live="groupBy">
                 <option value="day">Group by Day</option>
                 <option value="week">Group by Week</option>
                 <option value="month">Group by Month</option>
@@ -120,10 +120,10 @@
                                     {{ $groupBy === 'product' ? $group->count() : $group->count() }}
                                 </td>
                                 <td class="text-end">
-                                    @money($groupBy === 'product' ? $group->sum('amount') : $group->sum('grand_total'))
+                                    {{ $groupBy === 'product' ? $group->sum('amount') : $group->sum('grand_total') }}
                                 </td>
                                 <td class="text-end">
-                                    @money($groupBy === 'product' ? $group->avg('amount') : $group->avg('grand_total'))
+                                    {{ $groupBy === 'product' ? $group->avg('amount') : $group->avg('grand_total') }}
                                 </td>
                             </tr>
                         @endforeach
@@ -136,46 +136,73 @@
     @push('scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            document.addEventListener('livewire:load', function() {
+            document.addEventListener('livewire:init', function() {
+                // Initialize chart with empty data
                 const ctx = document.getElementById('salesChart').getContext('2d');
-                let chart = new Chart(ctx, {
+                const chart = new Chart(ctx, {
                     type: 'bar',
-                    data: { labels: [], datasets: [] },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'Sales Amount',
+                            data: [],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
                 });
 
+                // Function to update chart
                 function updateChart() {
-                    const data = @this.groupedSales;
-                    const labels = Object.keys(data).map(key => {
-                        if (@this.groupBy === 'day') {
-                            return new Date(key).toLocaleDateString();
-                        } else if (@this.groupBy === 'product') {
-                            return data[key][0].name;
-                        } else if (@this.groupBy === 'outlet') {
-                            return data[key][0].outlet.name;
+                    // Get data from Livewire component
+                    const groupedSales = @json($groupedSales);
+                    const groupBy = @json($groupBy);
+
+                    // Prepare labels and data
+                    const labels = [];
+                    const data = [];
+
+                    Object.entries(groupedSales).forEach(([key, group]) => {
+                        if (groupBy === 'day') {
+                            labels.push(new Date(key).toLocaleDateString());
+                        } else if (groupBy === 'product') {
+                            labels.push(group[0].name);
+                        } else if (groupBy === 'outlet') {
+                            labels.push(group[0].outlet.name);
+                        } else {
+                            labels.push(key);
                         }
-                        return key;
+
+                        if (groupBy === 'product') {
+                            data.push(group.reduce((sum, item) => sum + item.amount, 0));
+                        } else {
+                            data.push(group.reduce((sum, transaction) => sum + transaction.grand_total, 0));
+                        }
                     });
 
-                    const values = Object.values(data).map(group => {
-                        return @this.groupBy === 'product' ?
-                            group.reduce((sum, item) => sum + item.amount, 0) :
-                            group.reduce((sum, transaction) => sum + transaction.grand_total, 0);
-                    });
-
+                    // Update chart
                     chart.data.labels = labels;
-                    chart.data.datasets = [{
-                        label: 'Sales Amount',
-                        data: values,
-                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        borderWidth: 1
-                    }];
+                    chart.data.datasets[0].data = data;
                     chart.update();
                 }
 
-                Livewire.hook('message.processed', () => updateChart());
+                // Initial chart update
                 updateChart();
+
+                // Update chart when Livewire updates
+                Livewire.on('updated', () => {
+                    updateChart();
+                });
             });
         </script>
     @endpush

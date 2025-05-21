@@ -13,7 +13,7 @@ class CashierPerformance extends Component
 {
     use WithPagination;
 
-    public $dateRange = 'today';
+    public $dateRange = 'this_month';
     public $customStart;
     public $customEnd;
     public $outletFilter = '';
