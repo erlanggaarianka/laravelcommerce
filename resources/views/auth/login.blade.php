@@ -44,11 +44,11 @@
 
             <button class="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign in</button>
 
-            {{-- @if (Route::has('password.request'))
+            @if (Route::has('password.request'))
                 <a class="text-decoration-none" href="{{ route('password.request') }}">
                     Forgot your password?
                 </a>
-            @endif --}}
+            @endif
 
             <p class="mt-5 mb-3 text-muted">© {{ date('Y') }} {{ config('app.name', 'GOOD CREDIT') }}</p>
         </form>

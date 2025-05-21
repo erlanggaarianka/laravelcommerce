@@ -6,8 +6,8 @@
     <div class="container">
         <div class="row">
             <div class="col-12 py-2">
-                <h2>Adjust Inventory</h2>
-                <h4>Manage outlets inventory</h4>
+                <h2>Create Transaction</h2>
+                <h4>Input outlet transaction here</h4>
                 <hr>
             </div>
             <div class="col-12">
