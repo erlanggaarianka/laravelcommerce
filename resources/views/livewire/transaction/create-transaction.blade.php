@@ -122,52 +122,66 @@
                     </div>
 
                     <div class="row justify-content-end mb-4">
-                        <div class="col-md-4">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <th>Subtotal</th>
-                                    <td class="text-end">{{ number_format($subtotal, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Tax (10%)</th>
-                                    <td class="text-end">{{ number_format($tax, 2) }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Grand Total</th>
-                                    <td class="text-end">{{ number_format($grandTotal, 2) }}</td>
-                                </tr>
-                            </table>
+                            <div class="col-md-5 col-lg-4"> {{-- Adjusted width --}}
+                                <table class="table table-sm"> {{-- table-sm for denser table --}}
+                                    <tbody>
+                                        <tr>
+                                            <th>Subtotal</th>
+                                            <td class="text-end">{{ number_format($subtotal, 2) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                Tax
+                                                @if($currentOutletIsTaxEnabled && $currentOutletTaxRate > 0)
+                                                    ({{ number_format($currentOutletTaxRate, 2) }}%)
+                                                @else
+                                                    (0%)
+                                                @endif
+                                            </th>
+                                            <td class="text-end">{{ number_format($tax, 2) }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th class="fw-bold">Grand Total</th>
+                                            <td class="text-end fw-bold">{{ number_format($grandTotal, 2) }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <label class="form-label">Cash Received *</label>
-                            <input type="number" class="form-control" wire:model.live="cashReceived" min="0" step="0.01">
-                            @error('cashReceived') <span class="text-danger">{{ $message }}</span> @enderror
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <label class="form-label">Cash Received *</label>
+                                <input type="number" class="form-control @error('cashReceived') is-invalid @enderror" wire:model.live="cashReceived" min="0" step="0.01" placeholder="0.00">
+                                @error('cashReceived') <span class="text-danger invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Change</label>
+                                <input type="text" class="form-control" value="{{ number_format($change, 2) }}" readonly>
+                            </div>
+                             <div class="col-md-4">
+                                <label class="form-label">Notes</label>
+                                <input type="text" class="form-control @error('notes') is-invalid @enderror" wire:model.defer="notes" placeholder="Optional transaction notes">
+                                @error('notes') <span class="text-danger invalid-feedback d-block">{{ $message }}</span> @enderror
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Change</label>
-                            <input type="text" class="form-control" value="{{ number_format($change, 2) }}" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Notes</label>
-                            <input type="text" class="form-control" wire:model="notes" placeholder="Optional notes">
-                        </div>
-                    </div>
 
-                    <div class="d-flex justify-content-end">
-                        <a href="{{ route('transactions.list') }}" class="btn btn-secondary me-2">Cancel</a>
-                        <button type="submit" class="btn btn-primary">
-                            <span wire:loading.remove>Complete Transaction</span>
-                            <span wire:loading>Processing...</span>
-                        </button>
-                    </div>
-                @else
-                    <div class="alert alert-info">
-                        No products added to cart yet. Please add products to continue.
-                    </div>
-                @endif
+                        <div class="d-flex justify-content-end">
+                            @if(count($cart) > 0)
+                                <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" wire:target="save">
+                                    <span wire:loading.remove wire:target="save">Complete Transaction</span>
+                                    <span wire:loading wire:target="save">Processing...</span>
+                                </button>
+                            @else
+                                <button type="button" class="btn btn-primary" disabled>Complete Transaction</button>
+                            @endif
+                             <a href="{{ route('transactions.list') }}" class="btn btn-secondary ms-2">Cancel</a> {{-- Assuming route('transactions.list') exists --}}
+                        </div>
+                    @else {{-- if cart is empty --}}
+                        <div class="alert alert-info">
+                            No products added to cart yet. Please add products to continue.
+                        </div>
+                    @endif
             </form>
         </div>
     </div>

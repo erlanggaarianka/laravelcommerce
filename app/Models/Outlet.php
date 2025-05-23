@@ -12,26 +12,32 @@ class Outlet extends Model
     protected $fillable = [
         'name',
         'address',
-        'phone'
+        'phone',
+        'is_tax_enabled', // <-- Add this
+        'tax_rate'
     ];
 
     /**
-     * Relationship with Users (Cashiers)
+     * The attributes that should be cast.
+     *
+     * @var array
      */
+    protected $casts = [
+        'is_tax_enabled' => 'boolean', // <-- Add this
+        'tax_rate' => 'decimal:2', // Optional: Good to cast decimals too
+    ];
+
+    // ... rest of your model methods
     public function cashiers()
     {
         return $this->hasMany(User::class)->where('role', 'Cashier');
     }
 
-    /**
-     * Get all users (including owners for admin purposes)
-     */
     public function users()
     {
         return $this->hasMany(User::class);
     }
 
-    // app/Models/Outlet.php
     public function products()
     {
         return $this->belongsToMany(Product::class);

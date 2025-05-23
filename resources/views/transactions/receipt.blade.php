@@ -73,10 +73,12 @@
                                         <th>Subtotal:</th>
                                         <td class="text-end">{{ number_format($transaction->total_amount, 2) }}</td>
                                     </tr>
-                                    <tr>
-                                        <th>Tax (10%):</th>
-                                        <td class="text-end">{{ number_format($transaction->tax, 2) }}</td>
-                                    </tr>
+                                    @if ($transaction->is_tax_applied)
+                                        <tr>
+                                            <th>Tax ({{ $transaction->tax_rate_snapshot * 100 }}%):</th>
+                                            <td class="text-end">{{ number_format($transaction->tax, 2) }}</td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <th>Discount:</th>
                                         <td class="text-end">{{ number_format($transaction->discount, 2) }}</td>
