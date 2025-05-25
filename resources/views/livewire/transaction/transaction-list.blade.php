@@ -108,10 +108,18 @@
                                     @endif
                                 </td>
                                 <td class="text-end">
-                                    <button class="btn btn-sm btn-primary"
-                                            wire:click="openDetailModal({{ $transaction->id }})">
-                                        <i class="fas fa-eye"></i> View
-                                    </button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-primary"
+                                                wire:click="openDetailModal({{ $transaction->id }})">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        @if($transaction->status === 'completed')
+                                            <button class="btn btn-sm btn-danger"
+                                                    wire:click="confirmCancel({{ $transaction->id }})">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @empty
@@ -228,4 +236,53 @@
         </div>
         <div class="modal-backdrop fade show"></div>
     @endif
+
+    <!-- Cancel Confirmation Modal -->
+    <div wire:ignore.self class="modal fade" id="cancelModal" tabindex="-1"
+         aria-labelledby="cancelModalLabel" aria-hidden="true" wire:model="showCancelModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel transaction #{{ $selectedTransaction->invoice_number ?? '' }}?</p>
+                    <p>This will restore all items to inventory.</p>
+
+                    <div class="form-group mt-3">
+                        <label for="cancelReason">Cancellation Reason *</label>
+                        <textarea class="form-control" wire:model="cancelReason" rows="3" required></textarea>
+                        @error('cancelReason') <span class="text-danger">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                            wire:click="closeModal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            wire:click="cancelTransaction">
+                        Confirm Cancellation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('livewire:init', () => {
+                Livewire.on('showCancelModal', () => {
+                    const cancelModal = new bootstrap.Modal(document.getElementById('cancelModal'));
+                    cancelModal.show();
+                });
+
+                Livewire.on('hideCancelModal', () => {
+                    const cancelModal = bootstrap.Modal.getInstance(document.getElementById('cancelModal'));
+                    cancelModal.hide();
+                });
+            });
+        </script>
+    @endpush
 </div>

@@ -5,6 +5,9 @@ namespace App\Livewire\Transaction;
 use App\Models\Transaction;
 use App\Models\Outlet;
 use App\Models\User;
+use App\Models\Inventory;
+use App\Models\InventoryLog;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -22,7 +25,9 @@ class TransactionList extends Component
 
     // For modals
     public $showDetailModal = false;
+    public $showCancelModal = false;
     public $selectedTransaction = null;
+    public $cancelReason = '';
 
     public $outlets = [];
     public $users = [];
@@ -32,7 +37,7 @@ class TransactionList extends Component
     public function mount()
     {
         $this->outlets = Outlet::all();
-        $this->users = User::whereHas('outlet')->get(); // Assuming cashiers have outlet relationship
+        $this->users = User::whereHas('outlet')->get();
     }
 
     public function render()
@@ -72,9 +77,60 @@ class TransactionList extends Component
         $this->showDetailModal = true;
     }
 
+    public function confirmCancel($transactionId)
+    {
+        $this->selectedTransaction = Transaction::find($transactionId);
+        $this->cancelReason = '';
+        $this->dispatch('showCancelModal');
+    }
+
+    public function cancelTransaction()
+    {
+        $this->validate([
+            'cancelReason' => 'required|string|max:255'
+        ]);
+
+        if ($this->selectedTransaction && $this->selectedTransaction->status === 'completed') {
+            // Restore inventory for each item
+            foreach ($this->selectedTransaction->items as $item) {
+                $inventory = Inventory::where('product_id', $item->product_id)
+                    ->where('outlet_id', $this->selectedTransaction->outlet_id)
+                    ->first();
+
+                if ($inventory) {
+                    // Update inventory quantity
+                    $inventory->increment('quantity', $item->quantity);
+
+                    // Create inventory log
+                    $inventory->logs()->create([
+                        'user_id' => Auth::id(),
+                        'quantity' => $item->quantity,
+                        'reason' => 'Transaction Cancellation: ' . $this->selectedTransaction->invoice_number,
+                        'remaining_stock' => $inventory->quantity,
+                        'action' => 'add'
+                    ]);
+                }
+            }
+
+            // Update transaction status
+            $this->selectedTransaction->update([
+                'status' => 'cancelled',
+                'notes' => $this->selectedTransaction->notes
+                    ? $this->selectedTransaction->notes . "\nCancellation Reason: " . $this->cancelReason
+                    : "Cancellation Reason: " . $this->cancelReason
+            ]);
+
+            session()->flash('message', 'Transaction cancelled and inventory restored successfully!');
+        }
+
+        $this->reset(['showCancelModal', 'selectedTransaction', 'cancelReason']);
+        $this->dispatch('hideCancelModal');
+    }
+
     public function closeModal()
     {
-        $this->reset(['showDetailModal', 'selectedTransaction']);
+        $this->reset(['showDetailModal', 'showCancelModal', 'selectedTransaction', 'cancelReason']);
+        $this->dispatch('hideCancelModal');
     }
 
     public function resetFilters()

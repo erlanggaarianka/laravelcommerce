@@ -321,7 +321,14 @@ class CreateTransaction extends Component
             $inventory = Inventory::find($item['inventory_id']);
             if ($inventory) {
                 $inventory->decrement('quantity', $item['quantity']);
-                // Add inventory logging if you have it
+
+                // Log inventory change
+                $inventory->logs()->create([
+                    'user_id' => Auth::id(),
+                    'quantity' => -$item['quantity'],
+                    'reason' => 'Sold in transaction #' . $transaction->invoice_number,
+                    'remaining_stock' => $inventory->fresh()->quantity
+                ]);
             }
         }
 

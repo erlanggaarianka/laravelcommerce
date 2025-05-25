@@ -58,4 +58,14 @@ class Transaction extends Model
     {
         return $query->where('user_id', $userId);
     }
+
+    public function scopeCompleted($query)
+    {
+        return $query->where('status', 'completed');
+    }
+
+    public function scopeCancelled($query)
+    {
+        return $query->where('status', 'cancelled');
+    }
 }

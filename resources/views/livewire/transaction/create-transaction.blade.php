@@ -66,17 +66,17 @@
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label">Price *</label>
-                                <input type="number" class="form-control" wire:model="price" step="0.01">
+                                <input type="number" class="form-control" wire:model.live="price" step="0.01">
                                 @error('price') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label">Qty *</label>
-                                <input type="number" class="form-control" wire:model="quantity" min="1">
+                                <input type="number" class="form-control" wire:model.live="quantity" min="1">
                                 @error('quantity') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-2">
                                 <label class="form-label">Discount</label>
-                                <input type="number" class="form-control" wire:model="discount" min="0" step="0.01">
+                                <input type="number" class="form-control" wire:model.live="discount" min="0" step="0.01">
                                 @error('discount') <span class="text-danger">{{ $message }}</span> @enderror
                             </div>
                             <div class="col-md-1 d-flex align-items-end">
