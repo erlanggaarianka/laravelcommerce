@@ -57,7 +57,7 @@ class PaymentMethodRegistrationForm extends Component
 
         $data = [
             'name' => $this->name,
-            'code' => Str::slug($this->code),
+            'code' => $this->code,
             'description' => $this->description,
             'is_active' => $this->is_active,
         ];

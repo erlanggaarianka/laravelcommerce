@@ -118,8 +118,7 @@ class CreateTransaction extends Component
         if ($this->productId && $this->outletId) {
             $product = Product::find($this->productId);
             if ($product) {
-                // Use selling_price from product model, or a specific price for that outlet if you have such logic
-                $this->price = $product->selling_price; // Assuming 'selling_price' is the field on Product model
+                $this->price = $product->price;
             } else {
                 $this->price = 0;
             }

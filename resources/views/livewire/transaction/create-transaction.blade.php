@@ -56,7 +56,7 @@
                         <div class="row g-2">
                             <div class="col-md-5">
                                 <label class="form-label">Product *</label>
-                                <select class="form-select" wire:model="productId">
+                                <select class="form-select" wire:model.live="productId">
                                     <option value="">Select Product</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
